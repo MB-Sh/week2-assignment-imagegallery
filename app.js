@@ -2,60 +2,62 @@ console.log ("Hello");
 
 console.dir(document);
 
-// we are going to create a place to store images
-let images=[
-    {
-        src: "https://cdn.pixabay.com/photo/2022/10/11/12/38/dog-7514202_640.jpg",
-        alt:" A cute watch dog",
-        width: 300,
-        height: 200,
-    },
-    {
-        src: "https://cdn.pixabay.com/photo/2023/04/19/09/25/dog-7937282_640.jpg",
-        alt:" A curious dog",
-        width: 300,
-        height: 200,
+ // Select all main images and thumbnail images
+const mainImages = document.querySelectorAll(".image-container .item");
+const thumbnails = document.querySelectorAll(".thumbnail-container .item1 img");
+const prevButton = document.getElementById("prev");
+const nextButton = document.getElementById("next");
+  
+console.log("Previous button:", prevButton); 
+console.log("Next button:", nextButton); 
+// Lets keep track of the current image index
+    let currentIndex = 0; 
+    console.log("Initial currentIndex:", currentIndex);
 
-    },
-];
-//==========
-//! this is help for the arrow key stretch goal
-//I need a golabl vaiable to keep track of the index value
-//===========================
+// Function to updateMainImage display
+function updateMainImage(index) {
+    console.log("Updating main image to index:", index);
+      
+    mainImages.forEach((img) => img.style.display = "none"); // Hide all main images
+      
+      mainImages[index].style.display = "block"; // Show only the currently active image
+}
+  
+// addEventlisteners for the changing buttons
+prevButton.addEventListener("click", () => {
+    currentIndex = currentIndex - 1; // Decrease the index by 1
+    console.log("Previous button clicked. New currentIndex:", currentIndex);
 
-// step 1: I need to select the dom elcmet that will contain my images
-// slecte the thumbnail container
-// select the main image container
+    if (currentIndex < 0) { // Check if the index is less than 0
+    currentIndex = mainImages.length - 1; // If it is, reset it to the last image index
+    }
+    // Update the main image display
+    updateMainImage(currentIndex);
+});
 
-//step2 : write a function to create image in the thumbnails.
-function createThumbnails(oneThumbnailContainer){
-    //we need a loop to run through the array of images and create and instance for each image.
-    //used forEach/for loop
-    oneThumbnailContainer.forEach(function(thumbnail,index) {
+  
+// Add event listener for the "Next" button
+nextButton.addEventListener("click", () => {
+    currentIndex = currentIndex + 1; // Increase the index by 1
+    if (currentIndex >= mainImages.length) {  // Check if the index goes beyond the last image
+        
+        currentIndex = 0; // If it does, reset to first image index
+    }
+    // Update the main image display
+    updateMainImage(currentIndex);
+});
+// Add click event listener for each thumbnail
+thumbnails.forEach((thumbnail, index) => {
+    thumbnail.addEventListener('click', () => {
+        currentIndex = index; // Set the current index to the index of the clicked thumbnail
 
-        //a documnet method to create a DOM to contain my image infp (<img>)
-        //assign a vaule to my img attributes(src,alt,width,height e.g img.src="value")
-        // optional: give each image a class name
-        //append the new images to DOM container.
-        //add an eventListerner to each image, so when user clicks the big image shows on the screen.
-        //function eventHandler (){
-        //when the ...
-        createLargeImage(thumbnail[index]);
-        //}
-        //! thumbnail.addEventListerner ("click",eventHandler)
-
+console.log("Thumbnail clicked. New currentIndex:", currentIndex);
+// Update the main image display
+updateMainImage(currentIndex);
     });
-}
+});
 
-//step 3: write a function create the big image
-function createLargeImage(largeImage){
-    //!i might fine a problem here. images will keep adding one after the other
-    //! solution: set the innerHtml=" " (to be empty)
-    //create an img element
-    //(optional) you could give the lage img a classname
-    //set the src value
-    //set the alt value
-    //apprehend the large img to the DOM
-}
-
-//this code i found on github and it work. i need help understanding it.
+    // Initialize gallery by displaying the first image
+updateMainImage(currentIndex);
+console.log("Gallery initialized. Displaying image at index:", currentIndex);
+  
